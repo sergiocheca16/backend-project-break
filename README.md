@@ -114,8 +114,8 @@ Vamos a crear las rutas CRUD para los productos. Al usar formularios html, las r
 - POST /dashboard: Crea un nuevo producto.
 - GET /dashboard/:productId: Devuelve el detalle de un producto en el dashboard.
 - GET /dashboard/:productId/edit: Devuelve el formulario para editar un producto.
-- POST /dashboard/:productId: Actualiza un producto.
-- POST /dashboard/:productId/delete: Elimina un producto.
+- PUT /dashboard/:productId: Actualiza un producto.
+- DELETE /dashboard/:productId/delete: Elimina un producto.
 
 ## Creación de controladores
 
@@ -187,8 +187,11 @@ Crearemos un archivo `README.md` que contenga la documentación del proyecto. En
 
 Para poder comprobar que el controlador de productos funciona correctamente, vamos a crear tests para las funciones. Para ello, necesitaremos instalar el paquete `jest` y crear el archivo `productController.test.js` en la carpeta `test`. En este archivo, importaremos el controlador y crearemos los tests. Podemos hacer tests tanto para las funciones que devuelven html como para las funciones que crean, actualizan o eliminan productos.
 
+## Bonus 2 - API y documentación con Swagger
 
-## Bonus 2 - Autenticación con Firebase
+Para poder usar la aplicación con un frontend en React, vamos a crear una API que haga las mismas operaciones que el controlador de productos, pero que devuelva los datos en formato JSON. Documentaremos la API con Swagger, para que sea más fácil de entender y usar.
+
+## Bonus 3 - Autenticación con Firebase
 
 Vamos a crear un login y pass para el administrador con firebase. Para ello, necesitaremos instalar los paquetes `firebase` y `express-session` y configurar el proyecto en firebase. Podemos ver la guía de cómo hacerlo en el pdf [firebase.pdf](firebase.pdf).
 
@@ -196,9 +199,7 @@ Una vez configurado el proyecto en firebase, podremos crear un formulario de log
 
 Para comprobar si las credenciales son correctas, necesitaremos el middleware `express-session` para guardar la sesión del usuario. Tendremos que modificar el archivo index.js para que inicialice el middleware y lo use en las rutas del dashboard. También tendremos que añadir una palabra secreta para la sesión en el archivo .env y crear un archivo `middlewares/authMiddleware.js` que contenga el middleware para comprobar si el usuario está autenticado. Este buscará la sesión del usuario y, si no la encuentra, redirigirá al formulario de login.
 
-## Bonus 3 - API y documentación con Swagger
 
-Para poder usar la aplicación con un frontend en React, vamos a crear una API que haga las mismas operaciones que el controlador de productos, pero que devuelva los datos en formato JSON. Documentaremos la API con Swagger, para que sea más fácil de entender y usar.
 
 ## Recursos
 
