@@ -23,21 +23,20 @@ Vamos a crear la estructura de archivos que vamos a necesitar para el proyecto.
 
 ```
 .
-├── src
-│   ├── config
-│   │   ├── db.js
-│   │   └── firebase.js (BONUS)
-│   ├── controllers
-│   │   ├── productController.js
-│   │   └──authController.js (BONUS)
-│   ├── models
-│   │   └── Product.js
-│   ├── routes
-│   │   └── productRoutes.js
-│   │   └── authRoutes.js (BONUS)
-│   ├── middlewares (BONUS)
-│   │   └── authMiddleware.js
-│   └── index.js
+├── config
+│   ├── db.js
+│   └── firebase.js (BONUS)
+├── controllers
+│   ├── productController.js
+│   └── authController.js (BONUS)
+├── models
+│   └── Product.js
+├── routes
+│   └── productRoutes.js
+│   └── authRoutes.js (BONUS)
+├── middlewares (BONUS)
+│   └── authMiddleware.js
+└── index.js
 ├── test (BONUS)
 │   └── productController.test.js
 ├── public
@@ -58,7 +57,7 @@ Vamos a crear la estructura de archivos que vamos a necesitar para el proyecto.
 - `public/styles.css`: Archivo que contendrá los estilos de la aplicación (recomendable).
 - `public/images`: Carpeta que contendrá las imágenes de los productos (opcional).Se puede evitar si se usan urls externas para las imágenes.
 - `.env`: Archivo que contendrá las variables de entorno. En este caso, la uri de la base de datos de Atlas o el puerto de la aplicación. Más adelante añadiremos más variables de entorno, como la palabra secreta para la sesión.
-- `package.json`: Archivo que contendrá las dependencias del proyecto. Crearemos un script para iniciar el servidor con node y otro para iniciar el servidor con nodemon.("start": "node src/index.js", "dev": "nodemon src/index.js").
+- `package.json`: Archivo que contendrá las dependencias del proyecto. Crearemos un script para iniciar el servidor con node ("start": "node --watch index.js") o si lo preferís con nodemon ("dev": "nodemon index.js"). Si elegís esta última opción tendréis que instalar la dependencia como dependencia de desarrollo.
 
 **BONUS**
 - `config/firebase.js`: Archivo que contendrá la configuración de firebase. Deberá inicializar la conexión con firebase.
@@ -77,14 +76,16 @@ MONGO_URI=<uri_bd_atlas>
 
 ## Creación del servidor
 
-Vamos a crear el servidor con express. El servidor devolverá las vistas usando template literals. Para interfaces más complejas, se podría usar un motor de plantillas como pug. También necesitaremos leer el body de las peticiones tipo post. Como trabajaremos con formularios html, necesitaremos el middleware `express.urlencoded` para leer el body de las peticiones.
+Vamos a crear el servidor con express. El servidor devolverá las vistas usando template literals. También necesitaremos leer el body de las peticiones tipo post. Como trabajaremos con formularios html, necesitaremos el middleware `express.urlencoded` para leer el body de las peticiones.
+
+Para interfaces más complejas, se podría usar un motor de plantillas como pug (Si queréis usarlo la documentación está más abajo). Recomendación... No os compliquéis la vida.
 
 Para poder añadir estilos, imágenes, etc. necesitaremos el middleware `express.static` para servir archivos estáticos. En nuestro caso, serviremos los archivos estáticos desde la carpeta `public`.
 
 El puerto en el que escuchará el servidor lo cargaremos desde el archivo .env usando `dotenv`.
 
 
-Creamos el archivo `index.js` en la carpeta `src` y añadimos el código necesario para crear el servidor. 
+Creamos el archivo `index.js` y añadimos el código necesario para crear el servidor. Es el punto de inicio de nuestra API. 
 
 ## Creación de modelo
 
@@ -177,11 +178,11 @@ const showProducts = async (req, res) => {
 
 ## Despliegue
 
-Creamos un nuevo proyecto en fl0 y desplegamos el proyecto desde github. Recordad añadir las variables de entorno en fl0. Si no aparece el repositorio en fl0, tendremos que modificar los permisos de fl0 para que pueda acceder al repositorio.
+Creamos un nuevo proyecto en render y desplegamos el proyecto desde github. Recordad añadir las variables de entorno en render. Si no aparece el repositorio en render, tendremos que modificar los permisos de render para que pueda acceder al repositorio.
 
 ## Documentación
 
-Crearemos un archivo `README.md` que contenga la documentación del proyecto. En este readme explicaremos cómo poner en marcha la aplicación, las tecnologías que hemos usado, endpoints, etc.
+Crearemos un archivo `README.md` que contenga la documentación del proyecto. En este readme explicaremos cómo poner en marcha la aplicación, las tecnologías que hemos usado, endpoints, etc. En definitiva, una documentación de nuestra API.
 
 ## Bonus 1 - Tests
 
@@ -193,22 +194,22 @@ Para poder usar la aplicación con un frontend en React, vamos a crear una API q
 
 ## Bonus 3 - Autenticación con Firebase
 
-Vamos a crear un login y pass para el administrador con firebase. Para ello, necesitaremos instalar los paquetes `firebase` y `express-session` y configurar el proyecto en firebase. Podemos ver la guía de cómo hacerlo en el pdf [firebase.pdf](firebase.pdf).
+Crearemos un usuario administrador para que pueda subir desde el dashboard más productos. Esas rutas deberán estar protegidas para que solo pueda entrar quien esté logado y pueda acceder a esos elementos para crearlos, verlos, actualizarlos y borrarlos. 
+Podéis ver la manera de poder hacer esta autenticación con firebase aquí:
+`VIDEO`: https://drive.google.com/file/d/1LMYwYofSomhtgf63FhhOQNwyu6kVM24B/view 
+`REPO`: https://github.com/CarlosDiazGirol/firebase-example-log además de todo el código está el paso a paso desde firebase
 
-Una vez configurado el proyecto en firebase, podremos crear un formulario de login. Este formulario enviará las credenciales a un endpoint que comprobará si son correctas. Si son correctas, redirigirá al dashboard. Si no, mostrará un mensaje de error. También tendremos una página de registro, a la que se podrá acceder desde el formulario de login. Además, tendremos que crear un archivo `firebase.js` que inicialice la conexión con firebase y que contenga las funciones para comprobar si las credenciales son correctas y para cerrar la sesión.
+Recordad que los datos del `serviceAccount`están protegidos y debes tenerlos en el archivo `.env` 
 
-Para comprobar si las credenciales son correctas, necesitaremos el middleware `express-session` para guardar la sesión del usuario. Tendremos que modificar el archivo index.js para que inicialice el middleware y lo use en las rutas del dashboard. También tendremos que añadir una palabra secreta para la sesión en el archivo .env y crear un archivo `middlewares/authMiddleware.js` que contenga el middleware para comprobar si el usuario está autenticado. Este buscará la sesión del usuario y, si no la encuentra, redirigirá al formulario de login.
-
-
+También en este repo hay un ejemplo de `views`de como acceder a la carpeta `public` para hacer accesible esos archivos estáticos `express.static`. 
 
 ## Recursos
 
 - [Express](https://expressjs.com/)
 - [Mongoose](https://mongoosejs.com/)
 - [Atlas](https://www.mongodb.com/cloud/atlas)
-- [Fl0](https://fl0.io/)
+- [Render](https://render.com/)
 - [dotenv](https://www.npmjs.com/package/dotenv)
-- [express-session](https://www.npmjs.com/package/express-session)
 - [express.urlencoded](https://expressjs.com/en/api.html#express.urlencoded)
 - [express.static](https://expressjs.com/en/api.html#express.static)
 - [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
