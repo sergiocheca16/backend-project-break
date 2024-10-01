@@ -1,14 +1,25 @@
 # Guía para usar Git en equipo
 
+Git es una herramienta de control de versiones ampliamente utilizada que permite a los desarrolladores trabajar de manera colaborativa y gestionar el historial de cambios en sus proyectos. Con Git, múltiples personas pueden contribuir al mismo código sin sobrescribir el trabajo de los demás, gracias a un sistema de seguimiento de cambios que mantiene la integridad del proyecto.
+
+Uno de los conceptos clave en Git es el uso de ramas. Las ramas permiten a los desarrolladores trabajar en diferentes funcionalidades, correcciones de errores o experimentos de manera aislada del código principal. Cada rama es una copia del proyecto en la que se puede trabajar de manera independiente sin afectar a la rama principal (generalmente llamada `main`). Esto es útil para organizar el trabajo en equipo, ya que permite que varios desarrolladores trabajen simultáneamente en distintas características o secciones del código.
+
+El proceso típico de trabajo con Git incluye crear una rama nueva para desarrollar una funcionalidad o corregir un error, hacer commits para guardar los cambios, y luego integrar estos cambios a la rama principal mediante un `merge`. En este flujo, es importante coordinarse con el equipo, mantener los commits claros y realizar integraciones frecuentes para evitar conflictos.
+
+Git también permite trabajar de manera eficiente con repositorios remotos, como los alojados en plataformas como GitHub. Esto facilita la colaboración entre equipos distribuidos, ya que todos los miembros pueden compartir y sincronizar sus cambios con un repositorio centralizado.
+
+Esta guía está diseñada para ayudarte a comprender cómo usar Git en un entorno colaborativo, con un enfoque especial en el uso de ramas y buenas prácticas de trabajo en equipo.
+
 Ahora veremos los pasos necesarios para comenzar:
 
 ## 1. Crear el repositorio y clonarlo
 
 Lo primero de todo es que uno de los integrantes haga el repositorio en el que estará nuestro proyecto. Una vez se haga ese repositorio se tendrá que dar acceso a cada uno de los integrantes que van a participar en él. 
-Iremos al repositorio -> settings -> collaborators -> y ahí añadiremos el colaborador por su github. Recibirá una invitación al mail y al aceptarla ya tendrá el control que se le haya dado en el repositorio.
+Iremos al repositorio -> `settings` -> `collaborators and team` -> y ahí añadiremos al colaborador por su github. Recibirá una invitación al mail y al aceptarla ya tendrá el acceso que se le haya dado en el repositorio.
 
-Clonar un repositorio. Una vez teniendo todos los integrantes el acceso al repositorio en el que se va a trabajar se clonará en nuestro ordenadores. 
-Recordad, aquí no hay que forkear primero, eres dueño o colaborador del mismo, por tanto tendrás acceso a hacer pull, push ...
+### Clonar un repositorio. 
+Una vez teniendo todos los integrantes el acceso al repositorio en el que se va a trabajar se clonará en nuestros ordenadores. 
+Recordad, aquí NO hay que `forkear` primero. Eres dueño o colaborador del mismo, por tanto tendrás acceso a hacer pull, push ...
 
 Ejemplo:
 ```bash
