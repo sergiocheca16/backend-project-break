@@ -110,5 +110,5 @@ A partir de ahí ya tenemos el repo actualizado y volvemos a empezar. Creamos ot
 | `git merge <nombre-rama>`      | Une los cambios de una rama a la rama activa actual.                         |
 | `git status`                   | Muestra el estado actual de los archivos en el repositorio.                  |
 | `git log`                      | Muestra el historial de commits.                                             |
-|--------------------------------|------------------------------------------------------------------------------|
+
 
