@@ -196,8 +196,9 @@ Para poder usar la aplicación con un frontend en React, vamos a crear una API q
 
 Crearemos un usuario administrador para que pueda subir desde el dashboard más productos. Esas rutas deberán estar protegidas para que solo pueda entrar quien esté logado y pueda acceder a esos elementos para crearlos, verlos, actualizarlos y borrarlos. 
 Podéis ver la manera de poder hacer esta autenticación con firebase aquí:
-`VIDEO`: https://drive.google.com/file/d/1LMYwYofSomhtgf63FhhOQNwyu6kVM24B/view 
-`REPO`: https://github.com/CarlosDiazGirol/firebase-example-log además de todo el código está el paso a paso desde firebase
+
+- `VIDEO`: https://drive.google.com/file/d/1LMYwYofSomhtgf63FhhOQNwyu6kVM24B/view 
+- `REPO`: https://github.com/CarlosDiazGirol/firebase-example-log además de todo el código está el paso a paso desde firebase
 
 Recordad que los datos del `serviceAccount`están protegidos y debes tenerlos en el archivo `.env` 
 
