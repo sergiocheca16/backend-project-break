@@ -214,6 +214,7 @@ También en este repo hay un ejemplo de `views`de como acceder a la carpeta `pub
 - [express.static](https://expressjs.com/en/api.html#express.static)
 - [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 - [Pug](https://pugjs.org/api/getting-started.html)
+- [Guía de git en equipos](./git.md)
 - [Firebase](https://firebase.google.com/)
   - [Firebase Auth](https://firebase.google.com/docs/auth)
   - [Get Started with Firebase Authentication on Websites](https://firebase.google.com/docs/auth/web/start)
