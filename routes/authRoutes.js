@@ -1,56 +1,85 @@
-/*const express = require("express");
+// routes/authRoutes.js
+const express = require('express');
 const router = express.Router();
-const admin = require("firebase-admin");
-const serviceAccount = require("../config/firebase");
-const path = require("path"); // Añade esta línea
+const path = require('path');
+const admin = require('firebase-admin');
+require('../config/firebase'); // Asegura que Firebase ya está inicializado
+const checkAuth = require('../middlewares/authMiddleware');
+const auth = admin.auth();
 
-// Inicializar Firebase Admin SDK
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
+router.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
+router.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/views', 'register.html'));
+});
+
+router.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/views', 'login.html'));
+});
+
+router.get('/dashboard', checkAuth, (req, res) => {
+  const mail = req.user.email;
+  res.send(`
+    <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+      </head>
+      <body>
+        <h1>Bienvenido al Dashboard ${mail}</h1>
+        <form action="/logout" method="post">
+          <button type="submit">Logout</button>
+        </form>
+      </body>
+    </html>
+  `);
+});
+
+router.get('/datos', checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/views', 'datos.html'));
+});
+
+router.post('/register', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    await auth.createUser({
+      email,
+      password
     });
-}
-
-// Ruta para registrar un nuevo usuario
-router.post("/register", async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        // Intentar crear un nuevo usuario en Firebase Authentication
-        const userRecord = await admin.auth().createUser({
-            email,
-            password,
-        });
-        // Si la creación es exitosa, responder con un mensaje y el UID del usuario
-        res.status(201).json({ message: "Usuario registrado", uid: userRecord.uid });
-    } catch (error) {
-        // Si ocurre un error durante la creación, registrar el error y responder con un mensaje de error
-        console.error("Error registrando usuario:", error);
-        res.status(400).json({ message: "Error al registrar el usuario" });
-    }
+    res.redirect('/login');
+  } catch (error) {
+    console.error('Error creating new user:', error);
+    res.redirect('/register');
+  }
 });
 
-// Ruta para iniciar sesión
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
+router.post('/login', async (req, res) => {
+  const { idToken } = req.body;
 
-    try {
-        // Intentar obtener el registro del usuario por su correo electrónico
-        const userRecord = await admin.auth().getUserByEmail(email);
-        // Si el usuario existe, crear un token personalizado para él
-        const token = await admin.auth().createCustomToken(userRecord.uid);
-        // Responder con un mensaje de éxito y el token personalizado
-        res.status(200).json({ message: "Inicio de sesión exitoso", token });
-    } catch (error) {
-        // Si ocurre un error durante el inicio de sesión, registrar el error y responder con un mensaje de error
-        console.error("Error iniciando sesión:", error);
-        res.status(400).json({ message: "Error al iniciar sesión" });
-    }
+  try {
+    // Verifica el ID token
+    await auth.verifyIdToken(idToken);
+
+    // Guardar el ID token en una cookie para mantener la sesión activa
+    res.cookie('token', idToken, { httpOnly: true, secure: false });
+
+    // Redirigir a la página de dashboard nueva después de iniciar sesión
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error('Error verifying ID token:', error);
+    res.status(401).json({ error: 'Invalid token' });
+  }
 });
 
-// Ruta para mostrar el formulario de inicio de sesión
-router.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/views/login.html"));
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.redirect('/login');
 });
 
-module.exports = router;*/
+module.exports = router;

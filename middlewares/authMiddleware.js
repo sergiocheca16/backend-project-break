@@ -1,31 +1,23 @@
-/*const admin = require("firebase-admin");
-const serviceAccount = require("../config/firebase");
+// Middleware para verificar el token
+const admin = require('firebase-admin');
 
-// Inicializar Firebase Admin SDK
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
+const checkAuth = (req, res, next) => {
+  const auth = admin.auth();
+  const idToken = req.cookies.token;
+
+  if (!idToken) {
+    return res.redirect('/login');
+  }
+
+  auth.verifyIdToken(idToken)
+    .then(decodedToken => {
+      req.user = decodedToken;
+      next();
+    })
+    .catch(error => {
+      console.error('Error verifying token:', error);
+      res.redirect('/login');
     });
-}
-
-const authMiddleware = async (req, res, next) => {
-    const idToken = req.headers.authorization?.split("Bearer ")[1]; // Obtener el token del header
-    console.log("Token recibido:", idToken); // Añadido para depuración
-
-    if (!idToken) {
-        return res.status(401).send("Acceso no autorizado. Debes iniciar sesión.");
-    }
-
-    try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken); // Verificar el token
-        req.user = decodedToken; // Añadir el usuario decodificado a la solicitud
-        console.log("Token decodificado:", decodedToken); // Añadido para depuración
-        next(); // Continuar con la siguiente función
-    } catch (error) {
-        console.error("Error verificando el token:", error);
-        res.status(401).send("Token inválido o expirado.");
-    }
 };
 
-module.exports = authMiddleware;*/
-
+module.exports = checkAuth;
